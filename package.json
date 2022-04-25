@@ -1,6 +1,7 @@
 {
     "dependencies": {
-        "commander": "^9.2.0"
+        "commander": "^9.2.0",
+        "fs-extra": "^10.1.0"
     },
     "name": "secret-hider",
     "description": "",

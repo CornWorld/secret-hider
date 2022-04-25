@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import * as fs from "fs";
-
+import fs from "fs-extra";
 
 let program=new Command();
 
@@ -26,15 +25,23 @@ program
         }
         try {
             if(fs.existsSync(path)) {
-                let fileList=searchFiles(path,config.rules);
+                config.buildDir=config.buildDir??"./build/";
+                if(config.buildDir.slice(-1)!=='/') config.buildDir+='/';
+                
+                if(fs.existsSync(config.buildDir)) fs.removeSync(config.buildDir);
+                fs.mkdir(config.buildDir);
+                fs.copySync(path, config.buildDir+path);
+    
+                let fileList=searchFiles(config.buildDir,config.rules);
+    
                 for(let path of fileList) {
                     fs.readFile(path, (err,data)=>{
                         if(err===null) {
                             let str=data.toString("utf8");
                             if(Buffer.compare(Buffer.from(str,"utf8") , data) === 0) {
                                 if(config.hasOwnProperty("replace")) {
-                                    for(let item in config) {
-                                        str=str.replaceAll("[[["+item+"]]]",config[item]);
+                                    for(let item in config["replace"]) {
+                                        str=str.replaceAll("[[["+item+"]]]",config["replace"][item]);
                                     }
                                 }
                                 fs.writeFileSync(path, str);
