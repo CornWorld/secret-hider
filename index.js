@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import fs from "fs-extra";
+import fs from 'fs';
+import fse from "fs-extra";
 
 let program=new Command();
 
@@ -29,8 +30,8 @@ program
                 if(config.buildDir.slice(-1)!=='/') config.buildDir+='/';
                 
                 if(fs.existsSync(config.buildDir)) fs.removeSync(config.buildDir);
-                fs.mkdir(config.buildDir);
-                fs.copySync(path, config.buildDir+path);
+                fs.mkdirSync(config.buildDir);
+                fse.copySync(path, config.buildDir+path);
     
                 let fileList=searchFiles(config.buildDir,config.rules);
     
