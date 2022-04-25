@@ -8,7 +8,7 @@ let program=new Command();
 
 program
     .name("secretHider")
-    .version("1.0.1")
+    .version("1.0.2")
 ;
 
 program
